@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/prova.unity
+    path: Assets/IntroScene.unity
+    guid: bc3dd5e345f106646af21ef8ce1da1ef
+  - enabled: 1
+    path: Assets/PlayScene.unity
     guid: 25d29d25961a5d347b2c696f89b7b22e

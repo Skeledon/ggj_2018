@@ -13,9 +13,13 @@ public class CameraShake : MonoBehaviour
     {
         GameHandler.nextGameStep += StartShaking;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void OnDestroy()
+    {
+        GameHandler.nextGameStep -= StartShaking;
+    }
+    // Update is called once per frame
+    void Update ()
     {
 		
 	}

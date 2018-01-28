@@ -19,15 +19,20 @@ public class Asteroid : MonoBehaviour
         currentDirection = new Vector2(Random.value, Random.value);
         currentDirection.Normalize();
         transform.position = new Vector2(Random.Range(-20, 20), Random.Range(-15, 15));
+        GetComponent<Rigidbody2D>().AddForce(currentDirection * MovementSpeed, ForceMode2D.Impulse);
         GameHandler.GameReadyToStart += GreenToGo;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void OnDestroy()
+    {
+        GameHandler.GameReadyToStart -= GreenToGo;
+    }
+    // Update is called once per frame
+    void Update ()
     {
         if (ready)
         {
-            transform.Translate(currentDirection * Time.deltaTime * MovementSpeed, Space.World);
+            //transform.Translate(currentDirection * Time.deltaTime * MovementSpeed, Space.World);
             transform.Rotate(Vector3.forward, RotationSpeed * Time.deltaTime);
         }
 	}

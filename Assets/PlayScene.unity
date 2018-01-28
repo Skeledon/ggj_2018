@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4199028858259578, guid: c8a8858bae669044d90e027e3d88ddf3, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.414734
+      value: -3.01
       objectReference: {fileID: 0}
     - target: {fileID: 4199028858259578, guid: c8a8858bae669044d90e027e3d88ddf3, type: 2}
       propertyPath: m_LocalPosition.z
@@ -346,7 +346,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.6555724
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1227,7 +1227,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4384734983466976, guid: a4b0511e5a822184193a03a84ac83159, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.59
+      value: 3.24
       objectReference: {fileID: 0}
     - target: {fileID: 4384734983466976, guid: a4b0511e5a822184193a03a84ac83159, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1468,6 +1468,16 @@ Prefab:
       propertyPath: CountDown
       value: 
       objectReference: {fileID: 305148129}
+    - target: {fileID: 114480289281161322, guid: 7439485bac223aa4da776304a89d7599,
+        type: 2}
+      propertyPath: FirstInversion
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114480289281161322, guid: 7439485bac223aa4da776304a89d7599,
+        type: 2}
+      propertyPath: SecondInversion
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7439485bac223aa4da776304a89d7599, type: 2}
   m_IsPrefabParent: 0
@@ -1629,7 +1639,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4614935324111156, guid: b82d0ec2e42917a44b444a12da600b82, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.55
+      value: -3.03
       objectReference: {fileID: 0}
     - target: {fileID: 4614935324111156, guid: b82d0ec2e42917a44b444a12da600b82, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1675,7 +1685,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4536477847999010, guid: 03dc98ce3d0d68b4581967caa02538c9, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.64
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: 4536477847999010, guid: 03dc98ce3d0d68b4581967caa02538c9, type: 2}
       propertyPath: m_LocalPosition.z

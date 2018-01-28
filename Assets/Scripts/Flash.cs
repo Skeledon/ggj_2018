@@ -26,6 +26,12 @@ public class Flash : MonoBehaviour
     {
         GameHandler.nextGameStep += StartFlashing;
     }
+
+    private void OnDestroy()
+    {
+
+        GameHandler.nextGameStep -= StartFlashing;
+    }
     // Update is called once per frame
     void Update ()
     {

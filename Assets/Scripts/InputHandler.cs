@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure; // Required in C#
 
 [RequireComponent(typeof(Spaceship))]
 public class InputHandler : MonoBehaviour
@@ -27,6 +28,11 @@ public class InputHandler : MonoBehaviour
         GameHandler.GameReadyToStart += GreenToGo;
     }
 
+    private void OnDestroy()
+    {
+        GameHandler.nextGameStep -= nextStep;
+        GameHandler.GameReadyToStart -= GreenToGo;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -38,7 +44,7 @@ public class InputHandler : MonoBehaviour
 
     void getInput()
     {
-        if(Input.GetAxis(MyInputs[currentGameStep].TurnRight) > 0)
+        if (Input.GetAxis(MyInputs[currentGameStep].TurnRight) > 0)
         {
             myShip.Turn(-Input.GetAxis(MyInputs[currentGameStep].TurnRight));
         }

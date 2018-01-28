@@ -74,6 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4384734983466976}
   - component: {fileID: 212249850124651294}
+  - component: {fileID: 114276162208910024}
   - component: {fileID: 114126536913518342}
   - component: {fileID: 114285152347668342}
   - component: {fileID: 50255402006941364}
@@ -612,7 +613,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1934142577214462}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b9472e1ca201444d9c9d88645e321e1, type: 3}
   m_Name: 
@@ -630,6 +631,31 @@ MonoBehaviour:
     TurnLeft: HorRight2
     Accelerate: TriggerRight2
     Shoot: BumperLeft2
+--- !u!114 &114276162208910024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1934142577214462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4419dfa92e4bf3845899261a3cd6118d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyInputs:
+  - RightTurning: Left
+    LeftTurning: Left
+    Trigger: Left
+    Button: Left
+  - RightTurning: Left
+    LeftTurning: Right
+    Trigger: Left
+    Button: Left
+  - RightTurning: Left
+    LeftTurning: Right
+    Trigger: Rgiht
+    Button: Left
+  ControllerNumber: 1
 --- !u!114 &114285152347668342
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using XInputDotNetPure; // Required in C#
 
 
 public class GameHandler : MonoBehaviour
@@ -21,6 +22,7 @@ public class GameHandler : MonoBehaviour
     private int currentGameStep = 0;
     private float currentStepTime;
     private bool ready = false;
+    private bool finished = false;
 
     public ScoreBoard ScoreTextP1;
     public ScoreBoard ScoreTextP2;
@@ -40,21 +42,29 @@ public class GameHandler : MonoBehaviour
     {
         Checkpoint.Reached += CheckpointReachedByPlayer;
         currentTime = RoundTime;
+        currentGameStep = 0;
         StartCoroutine(CountdownStart());
 
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    private void OnDestroy()
     {
-        if (ready)
+        Checkpoint.Reached -= CheckpointReachedByPlayer;
+    }
+    // Update is called once per frame
+    void Update ()
+    {
+        if (ready && !finished)
         {
             currentTime -= Time.deltaTime;
             ScoreTextP1.ChangeNumber(currentScoreP1);
             ScoreTextP2.ChangeNumber(currentScoreP2);
             TimeText.ChangeNumber((int)currentTime);
             if (currentTime <= 0)
-                Time.timeScale = 0;
+            {
+                finished = true;
+                StartCoroutine(WaitAndRestart());
+            }
             HandleSteps();
         }
 	}
@@ -69,6 +79,7 @@ public class GameHandler : MonoBehaviour
 
     private void HandleSteps()
     {
+
         if (currentGameStep == 0)
         {
             if (currentStepTime >= FirstInversion)
@@ -77,20 +88,23 @@ public class GameHandler : MonoBehaviour
                 nextGameStep();
                 currentStepTime = 0;
                 GetComponent<AudioSource>().Play();
+                StartCoroutine(Vibrate());
 
             }
         }
         if (currentGameStep == 1)
         {
-            if (currentStepTime >= FirstInversion)
+            if (currentStepTime >= SecondInversion)
             {
                 currentGameStep++;
                 nextGameStep();
                 currentStepTime = 0;
                 GetComponent<AudioSource>().Play();
+                StartCoroutine(Vibrate());
 
             }
         }
+
         currentStepTime += Time.deltaTime;
 
     }
@@ -107,5 +121,21 @@ public class GameHandler : MonoBehaviour
         Destroy(CountDown.gameObject);
         GameReadyToStart();
         ready = true;
+    }
+    
+    IEnumerator WaitAndRestart()
+    {
+        yield return new WaitForSeconds(3);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        
+    }
+
+    IEnumerator Vibrate()
+    {
+        GamePad.SetVibration(PlayerIndex.One, 1, 1);
+        GamePad.SetVibration(PlayerIndex.Two, 1, 1);
+        yield return new WaitForSeconds(2);
+        GamePad.SetVibration(PlayerIndex.One, 0, 0);
+        GamePad.SetVibration(PlayerIndex.Two, 0, 0);
     }
 }

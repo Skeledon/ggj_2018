@@ -55,16 +55,21 @@ public class Spaceship : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         trail = transform.Find("Trail").gameObject;
-        GameHandler.nextGameStep += NextGameStep;
+
     }
     void Start ()
     {
+        GameHandler.nextGameStep += NextGameStep;
         trail.GetComponent<SpriteRenderer>().enabled = false;
         trail.GetComponent<Animator>().SetTrigger(FireColorStart);
         RightFlame.GetComponent<Animator>().SetTrigger(FireColorStart);
         LeftFlame.GetComponent<Animator>().SetTrigger(FireColorStart);
     }
 
+    private void OnDestroy()
+    {
+        GameHandler.nextGameStep -= NextGameStep;
+    }
     private void Update()
     {
         /*if(currentOrder != InputCarrier.ShipOrder.NoOrder)
