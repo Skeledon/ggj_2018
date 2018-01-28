@@ -11,7 +11,7 @@ public class Toroid : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        float offset = .8f;
+        float offset = .5f;
         maxX = 8 + offset;
         minX = -8 - offset;
         maxY = 5 + offset;

@@ -6,6 +6,7 @@ public class Checkpoint : MonoBehaviour
 {
     public delegate void CheckpointReached(int player);
     public static event CheckpointReached Reached;
+    public LayerMask PlayerLayers;
 	// Use this for initialization
 	void Start () {
 		
@@ -24,7 +25,7 @@ public class Checkpoint : MonoBehaviour
             do
             {
                 newPosition = new Vector2(Random.Range(-6, 6), Random.Range(-3, 3));
-            } while (((Vector2)transform.position - newPosition).SqrMagnitude() <= 4);
+            } while (((Vector2)transform.position - newPosition).SqrMagnitude() <= 9 || Physics2D.OverlapCircle(newPosition,1,PlayerLayers));
             transform.position = newPosition;
             Reached(collision.GetComponent<Spaceship>().Player);
         }

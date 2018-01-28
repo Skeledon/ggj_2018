@@ -17,19 +17,24 @@ public class InputHandler : MonoBehaviour
 
     private Spaceship myShip;
     private int currentGameStep = 0;
+    private bool ready;
 
 	// Use this for initialization
 	void Start ()
     {
         myShip = GetComponent<Spaceship>();
         GameHandler.nextGameStep += nextStep;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        GameHandler.GameReadyToStart += GreenToGo;
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-        getInput();
-	}
+        if (ready)
+        {
+            getInput();
+        }
+    }
 
     void getInput()
     {
@@ -55,5 +60,10 @@ public class InputHandler : MonoBehaviour
     private void nextStep()
     {
         currentGameStep++;
+    }
+
+    void GreenToGo()
+    {
+        ready = true;
     }
 }

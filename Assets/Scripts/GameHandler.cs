@@ -8,6 +8,8 @@ public class GameHandler : MonoBehaviour
 {
     public delegate void AdvanceStep();
     public static event AdvanceStep nextGameStep;
+    public delegate void StartGame();
+    public static event StartGame GameReadyToStart;
     public GameObject MyUI;
     public float RoundTime;
     public int FirstInversion;
@@ -18,28 +20,43 @@ public class GameHandler : MonoBehaviour
     private float currentTime;
     private int currentGameStep = 0;
     private float currentStepTime;
+    private bool ready = false;
 
-    public Text ScoreTextP1;
-    public Text ScoreTextP2;
-    public Text TimeText;
-	// Use this for initialization
-	void Start ()
+    public ScoreBoard ScoreTextP1;
+    public ScoreBoard ScoreTextP2;
+    public ScoreBoard TimeText;
+    public ScoreTable CountDown;
+
+    public int CurrentStep
+    {
+        get
+        {
+            return currentGameStep;
+        }
+    }
+
+    // Use this for initialization
+    void Start ()
     {
         Checkpoint.Reached += CheckpointReachedByPlayer;
         currentTime = RoundTime;
+        StartCoroutine(CountdownStart());
 
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        currentTime -= Time.deltaTime;
-        ScoreTextP1.text = currentScoreP1.ToString();
-        ScoreTextP2.text = currentScoreP2.ToString();
-        TimeText.text = currentTime.ToString("0");
-        if (currentTime <= 0)
-            Time.timeScale = 0;
-        HandleSteps();
+        if (ready)
+        {
+            currentTime -= Time.deltaTime;
+            ScoreTextP1.ChangeNumber(currentScoreP1);
+            ScoreTextP2.ChangeNumber(currentScoreP2);
+            TimeText.ChangeNumber((int)currentTime);
+            if (currentTime <= 0)
+                Time.timeScale = 0;
+            HandleSteps();
+        }
 	}
 
     private void CheckpointReachedByPlayer(int player)
@@ -59,6 +76,7 @@ public class GameHandler : MonoBehaviour
                 currentGameStep++;
                 nextGameStep();
                 currentStepTime = 0;
+                GetComponent<AudioSource>().Play();
 
             }
         }
@@ -69,9 +87,25 @@ public class GameHandler : MonoBehaviour
                 currentGameStep++;
                 nextGameStep();
                 currentStepTime = 0;
+                GetComponent<AudioSource>().Play();
 
             }
         }
         currentStepTime += Time.deltaTime;
+
+    }
+
+    IEnumerator CountdownStart()
+    {
+        int count = 3;
+        while (count > 0)
+        {
+            CountDown.ChangeNumber(count);
+            count--;
+            yield return new WaitForSeconds(1);
+        }
+        Destroy(CountDown.gameObject);
+        GameReadyToStart();
+        ready = true;
     }
 }

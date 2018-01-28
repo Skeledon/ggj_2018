@@ -10,16 +10,25 @@ public class Spaceship : MonoBehaviour
     public float Braking;
     public float TimeBetweenShots;
 
+    public GameObject RightFlame;
+    public GameObject LeftFlame;
+
+    public AudioClip Dolore;
+    public AudioClip Happy;
+    public AudioClip Shot;
+
     public int Player;
 
     public GameObject Bullet;
+
+    public string FireColorChange;
+    public string FireColorStart;
 
     private Vector2 currentVelocity;
     private bool isBraking;
     private bool canShoot = true;
     private bool isTrusting = false;
     private bool turningCoroutinRunning = false;
-    private ParticleSystem myParticle;
 
     private InputCarrier.ShipOrder currentOrder = InputCarrier.ShipOrder.NoOrder;
     private float currentOrderTime;
@@ -28,6 +37,12 @@ public class Spaceship : MonoBehaviour
 
     float currentRotation = 0;
     float targetRotation;
+
+    private GameObject trail;
+
+    private bool isTurning;
+
+    private int currentStep = 0;
 
 
     Transform t;
@@ -38,13 +53,17 @@ public class Spaceship : MonoBehaviour
     {
         t = transform;
         myRigidbody = GetComponent<Rigidbody2D>();
-        myParticle = GetComponentInChildren<ParticleSystem>();
         myAnimator = GetComponent<Animator>();
+        trail = transform.Find("Trail").gameObject;
+        GameHandler.nextGameStep += NextGameStep;
     }
     void Start ()
     {
-        myParticle.Stop();
-	}
+        trail.GetComponent<SpriteRenderer>().enabled = false;
+        trail.GetComponent<Animator>().SetTrigger(FireColorStart);
+        RightFlame.GetComponent<Animator>().SetTrigger(FireColorStart);
+        LeftFlame.GetComponent<Animator>().SetTrigger(FireColorStart);
+    }
 
     private void Update()
     {
@@ -115,24 +134,35 @@ public class Spaceship : MonoBehaviour
             canShoot = false;
             StartCoroutine(ShotCooldown());
             myAnimator.SetTrigger("Sparo");
+            GetComponent<AudioSource>().PlayOneShot(Shot);
         }
     }
 
     public void Accelerate()
     {
         AddAcceleration(Acceleration);
-        if(!myParticle.isPlaying)
-        {
-            myParticle.Play();
-        }
+        trail.GetComponent<SpriteRenderer>().enabled = true;
+        if(!trail.GetComponent<AudioSource>().isPlaying)
+            trail.GetComponent<AudioSource>().Play();
         isTrusting = true;
     }
 
     public void LateUpdate()
     {
         if (!isTrusting)
-            myParticle.Stop();
+        {
+            trail.GetComponent<SpriteRenderer>().enabled = false;
+            trail.GetComponent<AudioSource>().Stop();
+        }
+        if (!isTurning)
+        {
+            RightFlame.GetComponent<SpriteRenderer>().enabled = false;
+            LeftFlame.GetComponent<SpriteRenderer>().enabled = false;
+            RightFlame.GetComponent<AudioSource>().Stop();
+            LeftFlame.GetComponent<AudioSource>().Stop(); 
+        }
         isTrusting = false;
+        isTurning = false;
     }
     /// <summary>
     /// Turns the Spaceship
@@ -142,6 +172,20 @@ public class Spaceship : MonoBehaviour
     {
         float rotateValue = TurningSpeed * Time.deltaTime;
         t.Rotate(Vector3.forward, rotateValue * direction, Space.Self);
+        if(direction > 0)
+        {
+            RightFlame.GetComponent<SpriteRenderer>().enabled = true;
+            if (!RightFlame.GetComponent<AudioSource>().isPlaying)
+                RightFlame.GetComponent<AudioSource>().Play();
+        }
+        else
+        {
+            LeftFlame.GetComponent<SpriteRenderer>().enabled = true;
+            if (!LeftFlame.GetComponent<AudioSource>().isPlaying)
+                LeftFlame.GetComponent<AudioSource>().Play();
+        }
+        isTurning = true;
+
     }
 
 
@@ -175,11 +219,13 @@ public class Spaceship : MonoBehaviour
         if(collision.CompareTag("Pickup"))
         {
             myAnimator.SetTrigger("Happy");
+            GetComponent<AudioSource>().PlayOneShot(Happy);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         myAnimator.SetTrigger("Dolore");
+        GetComponent<AudioSource>().PlayOneShot(Dolore);
     }
 
     IEnumerator TurnCoroutine(int t)
@@ -218,6 +264,15 @@ public class Spaceship : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    private void NextGameStep()
+    {
+        currentStep++;
+        if (currentStep == 1)
+            RightFlame.GetComponent<Animator>().SetTrigger(FireColorChange);
+        if (currentStep == 2)
+            trail.GetComponent<Animator>().SetTrigger(FireColorChange);
     }
 
 }
